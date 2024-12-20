@@ -4,17 +4,25 @@ from vllm import LLM, SamplingParams
 
 app = FastAPI()
 
-# Modeli yükle
-model_name="Qwen/Qwen2-7B-Instruct"
-# Initialize the model with vLLM
-llm = LLM(
-    model=model_name,
-    trust_remote_code=True,  # Required for Qwen models
-    tensor_parallel_size=1,   # Adjust based on available GPUs
-    dtype="float16",         # Using float16 for better memory efficiency
-    gpu_memory_utilization=0.8,
-    max_model_len=5608
-)
+# Global model nesnesi
+llm = None
+
+async def load_model():
+    global llm
+    if llm is None:
+        model_name = "Qwen/Qwen2-7B-Instruct"
+        llm = LLM(
+            model=model_name,
+            trust_remote_code=True,
+            tensor_parallel_size=1,
+            dtype="float16",
+            gpu_memory_utilization=0.8,
+            max_model_len=5608
+        )
+
+@app.on_event("startup")
+async def startup_event():
+    await load_model()
 
 
 
@@ -44,6 +52,7 @@ async def home():
 
 @app.get("/q/")
 async def llm_response(q: str,cid: str):
+    global llm
     try:
         cat_list = data[cid]
         prompt = format_chat_prompt(q, cat_list)
