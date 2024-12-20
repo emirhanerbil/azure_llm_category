@@ -10,7 +10,7 @@ llm = LLM(
     trust_remote_code=True,  # Required for Qwen models
     tensor_parallel_size=1,   # Adjust based on available GPUs
     dtype="float16",         # Using float16 for better memory efficiency
-    gpu_memory_utilization=0.9,
+    gpu_memory_utilization=0.8,
     max_model_len=5608
 )
 
