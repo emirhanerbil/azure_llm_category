@@ -13,3 +13,14 @@ llm = LLM(
 )
 
 print("done")
+
+sampling_params = SamplingParams(
+    temperature=0.2,
+    top_p=0.9,
+    max_tokens=64,
+    stop=["\n"]
+    )
+prompt = "hello, what is the capital of Turkey?"
+outputs = llm.generate([prompt], sampling_params)
+response = outputs[0].outputs[0].text.strip()
+print(response)
