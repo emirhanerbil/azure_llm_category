@@ -43,7 +43,7 @@ async def home():
 
 
 @app.get("/q/")
-async def get_user(q: str,cid: str):
+async def llm_response(q: str,cid: str):
     try:
         cat_list = data[cid]
         prompt = format_chat_prompt(q, cat_list)
