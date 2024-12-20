@@ -35,6 +35,10 @@ with open("title_cat_waw.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 
+@app.get("/")
+async def home():
+    return {"msg": "Hello"}
+
 
 @app.get("/q/")
 async def get_user(q: str,cid: str):
